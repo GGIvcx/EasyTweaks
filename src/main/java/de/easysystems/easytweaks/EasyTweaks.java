@@ -70,14 +70,9 @@ public class EasyTweaks extends JavaPlugin implements Listener {
         }
     }
 
-    /** Weiche Prüfung ohne Abhängigkeit: "vanished"-Metadata oder für andere Spieler versteckt (EasyVanish nutzt hidePlayer). */
+    /** Vanish-Erkennung über die Standard-"vanished"-Metadata (z.B. von EasyVanish gesetzt). */
     private static boolean isVanished(Player p) {
-        if (p.getMetadata("vanished").stream().anyMatch(m -> m.asBoolean())) return true;
-        // ponytail: O(n²) pro Tick über alle Spieler, ok für kleine Server; bei Bedarf Vanish-API/Metadata nutzen
-        for (Player o : Bukkit.getOnlinePlayers()) {
-            if (o != p && !o.canSee(p)) return true;
-        }
-        return false;
+        return p.getMetadata("vanished").stream().anyMatch(m -> m.asBoolean());
     }
 
     @EventHandler

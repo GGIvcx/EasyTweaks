@@ -26,17 +26,22 @@ Keine Datenordner-Migration nötig.
 
 ## Befehle
 
-Keine.
+- `/easytweaks` – öffnet das Admin-Menü: Tweaks per Linksklick ein-/ausschalten, per Rechtsklick Einstellungen öffnen (MOTD: erste Zeile und Fallback per Chat ändern, Sprüche im Untermenü hinzufügen, bearbeiten und löschen).
 
 ## Permissions
 
-Keine.
+- `easysystems.tweaks.gui` – Menü öffnen (Standard: op)
+- `easysystems.tweaks.*` – alle Rechte
 
 ## Konfiguration
 
 `plugins/EasyTweaks/config.yml`:
 
 ```yaml
+# Präfix für Chat-Rückmeldungen (MiniMessage-Format)
+prefix: '<gold>EasyTweaks</gold> <dark_gray>┃</dark_gray> '
+# MOTD-Tweak ein- oder ausschalten (auch per /easytweaks)
+motd-enabled: true
 # Optionale erste MOTD-Zeile (MiniMessage). Leer lassen, um sie zu deaktivieren.
 line1: "<gradient:gold:yellow><bold>EasySystems</bold></gradient>"
 # Wird angezeigt, wenn niemand online ist.
@@ -55,11 +60,12 @@ sayings:
   - "<green>Creeper fürchten <yellow>%player%"
 ```
 
+- `motd-enabled`: schaltet den MOTD-Tweak ein/aus.
 - `line1`: erste MOTD-Zeile; leer lassen, um sie zu deaktivieren.
 - `fallback`: zweite Zeile, wenn niemand online ist (oder `sayings` leer ist).
 - `sayings`: Liste möglicher Sprüche; `%player%` wird durch einen zufälligen Online-Spieler ersetzt.
 
-Alle Texte nutzen das [MiniMessage-Format](https://docs.advntr.dev/minimessage/format.html). Die Config wird beim Start geladen; Änderungen an der Datei wirken erst nach einem Neustart des Servers (es gibt keinen Reload-Befehl).
+Alle Texte nutzen das [MiniMessage-Format](https://docs.advntr.dev/minimessage/format.html). Die Config wird beim Start geladen. Manuelle Änderungen an der Datei wirken erst nach einem Neustart; Änderungen über das Menü gelten sofort (die MOTD liest die Config bei jeder Abfrage).
 
 ## Bauen
 

@@ -5,3 +5,16 @@ api-version: '26.3'
 author: Ivcx
 description: Zeigt eine MOTD mit zufälligen Spielernamen in der Serverliste an
 prefix: EasyTweaks
+commands:
+  easytweaks:
+    description: Öffnet das Menü zum Verwalten der Tweaks
+    usage: /<command>
+permissions:
+  easysystems.tweaks.*:
+    description: Alle EasyTweaks-Berechtigungen
+    default: op
+    children:
+      easysystems.tweaks.gui: true
+  easysystems.tweaks.gui:
+    description: Erlaubt das Öffnen des Tweaks-Menüs
+    default: op

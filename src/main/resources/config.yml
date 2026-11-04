@@ -1,0 +1,16 @@
+# Optionale erste MOTD-Zeile (MiniMessage). Leer lassen, um sie zu deaktivieren.
+line1: "<gradient:gold:yellow><bold>EasySystems</bold></gradient>"
+# Wird angezeigt, wenn niemand online ist.
+fallback: "<gray>Der Server schläft... weck ihn auf!"
+# %player% = zufälliger Online-Spieler
+sayings:
+  - "<green>Bei <yellow>%player%</yellow> beliebt"
+  - "<green><yellow>%player%</yellow> hat den Server gebaut <gray>(behauptet er)"
+  - "<green>Empfohlen von <yellow>%player%"
+  - "<yellow>%player%</yellow> <green>ist schon wieder online..."
+  - "<green>4 von 5 Zahnärzten empfehlen <yellow>%player%"
+  - "<green>Dank <yellow>%player%</yellow> noch nicht explodiert"
+  - "<yellow>%player%</yellow> <green>hat nur kurz Diamanten geholt"
+  - "<green>Von <yellow>%player%</yellow> <green>persönlich getestet, nie für gut befunden"
+  - "<yellow>%player%</yellow> <green>sagt: Ich lag nicht in der Lava!"
+  - "<green>Creeper fürchten <yellow>%player%"

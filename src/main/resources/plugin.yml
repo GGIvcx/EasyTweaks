@@ -1,0 +1,7 @@
+name: EasyTweaks
+version: '${project.version}'
+main: de.easysystems.easytweaks.EasyTweaks
+api-version: '26.3'
+author: Ivcx
+description: Zeigt eine MOTD mit zufälligen Spielernamen in der Serverliste an
+prefix: EasyTweaks

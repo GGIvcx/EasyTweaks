@@ -9,6 +9,7 @@ commands:
   easytweaks:
     description: Öffnet das Menü zum Verwalten der Tweaks
     usage: /<command>
+    aliases: [tweaks]
 permissions:
   easysystems.tweaks.*:
     description: Alle EasyTweaks-Berechtigungen

@@ -63,6 +63,10 @@ public class TweaksGui implements Listener {
         inv.setItem(11, item(Material.OAK_SIGN, "<gold>MOTD",
                 status(on), "<gray>Zufälliger Spruch mit Spielername", "<gray>in der Serverliste.", "",
                 "<dark_gray>» <yellow>Linksklick zum Umschalten", "<dark_gray>» <yellow>Rechtsklick für Einstellungen"));
+        boolean egg = plugin.getConfig().getBoolean("dragon-egg-enabled", true);
+        inv.setItem(15, item(Material.DRAGON_EGG, "<gold>Drachenei",
+                status(egg), "<gray>Spieler mit dem Drachenei leuchten", "<gray>und sind von Ender-Partikeln umgeben.", "",
+                "<dark_gray>» <yellow>Klicken zum Umschalten"));
         inv.setItem(22, item(Material.BARRIER, "<red>Schließen"));
         p.openInventory(inv);
     }
@@ -185,9 +189,14 @@ public class TweaksGui implements Listener {
 
         if (menu.type() == MAIN) {
             if (slot == 22) p.closeInventory();
-            else if (slot == 11) {
+            else if (slot == 15) {
+                plugin.getConfig().set("dragon-egg-enabled", !plugin.getConfig().getBoolean("dragon-egg-enabled", true));
+                plugin.saveConfig();
+                p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+                openMain(plugin, p);
+            } else if (slot == 11) {
                 if (e.getClick() == ClickType.RIGHT) openMotd(plugin, p);
-                else if (e.getClick() == ClickType.LEFT) { toggle(); openMain(plugin, p); }
+                else if (e.getClick() == ClickType.LEFT) { toggle(); p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f); openMain(plugin, p); }
             }
         } else if (menu.type() == SAYINGS) {
             sayingsClick(p, menu, slot, e.getClick());
@@ -204,7 +213,7 @@ public class TweaksGui implements Listener {
             } else if (slot == 15) openSayings(plugin, p, menu.page());
         } else {
             switch (slot) {
-                case 10 -> { toggle(); openMotd(plugin, p); }
+                case 10 -> { toggle(); p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f); openMotd(plugin, p); }
                 case 12 -> prompt(p, "line1", "die neue erste MOTD-Zeile");
                 case 14 -> prompt(p, "fallback", "den neuen Fallback-Text");
                 case 16 -> openSayings(plugin, p, 0);

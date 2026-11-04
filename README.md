@@ -10,6 +10,7 @@ Teil der **EasySystems**-Pluginreihe von Ivcx.
 - Zweite Zeile: zufälliger Spruch mit zufälligem Online-Spielernamen (`%player%`)
 - Fallback-Text, wenn niemand online ist
 - Spielernamen werden nie als MiniMessage interpretiert
+- Tweak „Drachenei“: Spieler mit einem Drachenei im Inventar leuchten und sind von Ender-Partikeln umgeben (Spectator und unsichtbare/vanished Spieler ausgenommen)
 
 ## Voraussetzungen
 
@@ -26,7 +27,7 @@ Keine Datenordner-Migration nötig.
 
 ## Befehle
 
-- `/easytweaks` – öffnet das Admin-Menü: Tweaks per Linksklick ein-/ausschalten, per Rechtsklick Einstellungen öffnen (MOTD: erste Zeile und Fallback per Chat ändern, Sprüche im Untermenü hinzufügen, bearbeiten und löschen).
+- `/easytweaks` (Alias `/tweaks`) – öffnet das Admin-Menü: Tweaks per Linksklick ein-/ausschalten (Drachenei: Klick), per Rechtsklick Einstellungen öffnen (MOTD: erste Zeile und Fallback per Chat ändern, Sprüche im Untermenü hinzufügen, bearbeiten und löschen).
 
 ## Permissions
 
@@ -42,6 +43,8 @@ Keine Datenordner-Migration nötig.
 prefix: '<gold>EasyTweaks</gold> <dark_gray>┃</dark_gray> '
 # MOTD-Tweak ein- oder ausschalten (auch per /easytweaks)
 motd-enabled: true
+# Drachenei-Tweak ein- oder ausschalten: Spieler mit Drachenei im Inventar leuchten und haben Ender-Partikel
+dragon-egg-enabled: true
 # Optionale erste MOTD-Zeile (MiniMessage). Leer lassen, um sie zu deaktivieren.
 line1: "<gradient:gold:yellow><bold>EasySystems</bold></gradient>"
 # Wird angezeigt, wenn niemand online ist.
@@ -61,6 +64,7 @@ sayings:
 ```
 
 - `motd-enabled`: schaltet den MOTD-Tweak ein/aus.
+- `dragon-egg-enabled`: schaltet den Drachenei-Tweak ein/aus (wirkt sofort).
 - `line1`: erste MOTD-Zeile; leer lassen, um sie zu deaktivieren.
 - `fallback`: zweite Zeile, wenn niemand online ist (oder `sayings` leer ist).
 - `sayings`: Liste möglicher Sprüche; `%player%` wird durch einen zufälligen Online-Spieler ersetzt.

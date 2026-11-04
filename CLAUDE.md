@@ -13,9 +13,9 @@ Default system java is 21 and cannot compile against paper-api 26.3, so always s
 ## Structure
 
 - Standard Maven layout, but package is `de.easysystems.easytweaks` (differs from the `de.ivcx.*` packages of the sibling plugins).
-- `EasyTweaks` (main class, Listener): `onPing(PaperServerListPingEvent)` builds the MOTD from config (skipped when `motd-enabled: false`); also handles `/easytweaks` and the `msg(...)` helper (prefix from config); `%player%` is rewritten to the `<player>` tag and resolved with `Placeholder.unparsed`.
+- `EasyTweaks` (main class, Listener): `onPing(PaperServerListPingEvent)` builds the MOTD from config (skipped when `motd-enabled: false`); also handles `/easytweaks` and the `msg(...)` helper (prefix from config); `tickDragonEgg()` (repeating task, 10 ticks) implements the Drachenei tweak (glow + PORTAL particles, tracked `glowing` UUID set, vanish soft-check via `vanished` metadata / `canSee`); `%player%` is rewritten to the `<player>` tag and resolved with `Placeholder.unparsed`.
 - `TweaksGui` (Listener): admin GUI (main menu with one item per tweak, MOTD submenu, paginated sayings menu with add/edit/delete + delete confirmation), custom `Menu` InventoryHolder, chat input via `AsyncChatEvent` (`Input` record: config key, or saying add/edit with expected old text for stale-index checks). `onPing` reads `sayings` from config on every ping. New tweak = one item in `openMain` + a case in `onClick`.
-- `src/main/resources/plugin.yml`, `config.yml` (keys: prefix, motd-enabled, line1, fallback, sayings). Command `/easytweaks`, permission `easysystems.tweaks.gui` (+ `easysystems.tweaks.*`).
+- `src/main/resources/plugin.yml`, `config.yml` (keys: prefix, motd-enabled, dragon-egg-enabled, line1, fallback, sayings). Command `/easytweaks` (alias `/tweaks`), permission `easysystems.tweaks.gui` (+ `easysystems.tweaks.*`).
 
 ## Conventions
 

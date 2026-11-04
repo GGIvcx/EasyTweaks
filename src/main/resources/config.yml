@@ -2,6 +2,8 @@
 prefix: '<gold>EasyTweaks</gold> <dark_gray>┃</dark_gray> '
 # MOTD-Tweak ein- oder ausschalten (auch per /easytweaks)
 motd-enabled: true
+# Drachenei-Tweak ein- oder ausschalten: Spieler mit Drachenei im Inventar leuchten und haben Ender-Partikel
+dragon-egg-enabled: true
 # Optionale erste MOTD-Zeile (MiniMessage). Leer lassen, um sie zu deaktivieren.
 line1: "<gradient:gold:yellow><bold>EasySystems</bold></gradient>"
 # Wird angezeigt, wenn niemand online ist.

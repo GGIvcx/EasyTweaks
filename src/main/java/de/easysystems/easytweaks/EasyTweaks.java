@@ -127,7 +127,7 @@ public class EasyTweaks extends JavaPlugin implements Listener {
                 msg(p, "<red>Dafür hast du keine Berechtigung.", false, true);
                 return true;
             }
-            msg(p, toggleBypass(p) ? "<green>Dimensions-Bypass aktiviert." : "<green>Dimensions-Bypass deaktiviert.", true, false);
+            msg(p, toggleBypass(p) ? "<green>Dein Dimensions-Bypass wurde aktiviert." : "<green>Dein Dimensions-Bypass wurde deaktiviert.", true, false);
             return true;
         }
         if (!p.hasPermission("easysystems.tweaks.gui")) {

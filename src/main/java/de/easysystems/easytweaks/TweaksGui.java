@@ -83,7 +83,7 @@ public class TweaksGui implements Listener {
                 "<gray>Spieler können das End nicht|<gray>mehr über Portale betreten.", "Klicken zum Umschalten");
         if (p.hasPermission(EasyTweaks.BYPASS)) {
             inv.setItem(32, item(Material.ENDER_EYE, "<aqua>Dimensions-Bypass",
-                    status(plugin.bypass(p)), "<gray>Gesperrte Dimensionen trotzdem betreten.",
+                    "<gray>Gilt nur für dich selbst.", status(plugin.bypass(p)), "<gray>Gesperrte Dimensionen trotzdem betreten.",
                     "", "<dark_gray>» <yellow>Klicken zum Umschalten"));
         }
         inv.setItem(31, item(Material.BARRIER, "<red>Schließen"));

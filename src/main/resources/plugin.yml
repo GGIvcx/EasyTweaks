@@ -21,5 +21,5 @@ permissions:
     description: Erlaubt das Öffnen des Tweaks-Menüs
     default: op
   easysystems.tweaks.bypass.dimensions:
-    description: Erlaubt das Betreten gesperrter Dimensionen (Nether/End)
+    description: Eigener Bypass für die Nether-/End-Sperre (per /tweaks bypass umschaltbar)
     default: op

@@ -3,12 +3,12 @@ version: '${project.version}'
 main: de.easysystems.easytweaks.EasyTweaks
 api-version: '26.3'
 author: Ivcx
-description: Zeigt eine MOTD mit zufälligen Spielernamen in der Serverliste an
+description: Kleine Server-Tweaks wie MOTD, Sitzen, unsichtbare Item-Rahmen und Spielerköpfe
 prefix: EasyTweaks
 commands:
   easytweaks:
     description: Öffnet das Menü zum Verwalten der Tweaks
-    usage: /<command>
+    usage: /<command> [bypass]
     aliases: [tweaks]
 permissions:
   easysystems.tweaks.*:
@@ -16,6 +16,10 @@ permissions:
     default: op
     children:
       easysystems.tweaks.gui: true
+      easysystems.tweaks.bypass.dimensions: true
   easysystems.tweaks.gui:
     description: Erlaubt das Öffnen des Tweaks-Menüs
+    default: op
+  easysystems.tweaks.bypass.dimensions:
+    description: Erlaubt das Betreten gesperrter Dimensionen (Nether/End)
     default: op

@@ -1,6 +1,6 @@
 # EasyTweaks
 
-Paper plugin that sets the server-list MOTD: optional fixed first line plus a random saying containing a random online player's name.
+Paper plugin with small toggleable server tweaks (MOTD with random player name, dragon egg glow, sitting, item frames, player heads, phantoms, Happy Ghast speed, Nether/End lock).
 
 ## Build
 
@@ -14,8 +14,9 @@ Default system java is 21 and cannot compile against paper-api 26.3, so always s
 
 - Standard Maven layout, but package is `de.easysystems.easytweaks` (differs from the `de.ivcx.*` packages of the sibling plugins).
 - `EasyTweaks` (main class, Listener): `onPing(PaperServerListPingEvent)` builds the MOTD from config (skipped when `motd-enabled: false`); also handles `/easytweaks` and the `msg(...)` helper (prefix from config); `tickDragonEgg()` (repeating task, 10 ticks) implements the Drachenei tweak (glow + PORTAL particles, tracked `glowing` UUID set, vanish detection uses the standard `vanished` metadata, e.g. set by EasyVanish); `%player%` is rewritten to the `<player>` tag and resolved with `Placeholder.unparsed`.
-- `TweaksGui` (Listener): admin GUI (main menu with one item per tweak, MOTD submenu, paginated sayings menu with add/edit/delete + delete confirmation), custom `Menu` InventoryHolder, chat input via `AsyncChatEvent` (`Input` record: config key, or saying add/edit with expected old text for stale-index checks). `onPing` reads `sayings` from config on every ping. New tweak = one item in `openMain` + a case in `onClick`.
-- `src/main/resources/plugin.yml`, `config.yml` (keys: prefix, motd-enabled, dragon-egg-enabled, line1, fallback, sayings). Command `/easytweaks` (alias `/tweaks`), permission `easysystems.tweaks.gui` (+ `easysystems.tweaks.*`).
+- `TweaksGui` (Listener): admin GUI (36-slot main menu with one item per tweak, MOTD and Happy-Ghast submenus, paginated sayings menu with add/edit/delete + delete confirmation), custom `Menu` InventoryHolder, chat input via `AsyncChatEvent` (`Input` record: config key, or saying add/edit with expected old text for stale-index checks). `onPing` reads `sayings` from config on every ping. New tweak = one `tweak(...)` in `openMain` + an entry in `mainKey`.
+- `SmallTweaks` (Listener): event tweaks Sitzen (non-persistent PDC-tagged marker ArmorStand seats, `seats` map + 1s cleanup timer), armor stand arms, invisible item frames, player heads, no phantoms, Happy Ghast speed (`FLYING_SPEED` = 0.05 × factor), Nether-/End-Sperre (`PlayerPortalEvent`, `EntityPortalEvent` incl. Passagiere, Enderperlen, `PortalCreateEvent` FIRE + Enderauge-Platzierung, target world Environment NETHER/THE_END, keys `nether-lock-enabled`/`end-lock-enabled` default false, 3s message rate-limit, bypass `easysystems.tweaks.bypass.dimensions`; persönlicher Schalter als PDC-Flag `bypass-off` via `EasyTweaks#bypass/toggleBypass`, `/tweaks bypass` + GUI-Slot 32; Fahrzeug erlaubt, sobald ein Spieler-Passagier wirksamen Bypass hat).
+- `src/main/resources/plugin.yml`, `config.yml` (keys: prefix, `<tweak>-enabled` toggles read live, happy-ghast-speed, line1, fallback, sayings). Command `/easytweaks` (alias `/tweaks`), permission `easysystems.tweaks.gui` (+ `easysystems.tweaks.*`).
 
 ## Conventions
 

@@ -4,19 +4,37 @@ prefix: '<gold>EasyTweaks</gold> <dark_gray>┃</dark_gray> '
 motd-enabled: true
 # Drachenei-Tweak ein- oder ausschalten: Spieler mit Drachenei im Inventar leuchten und haben Ender-Partikel
 dragon-egg-enabled: true
+# Sitzen-Tweak: Rechtsklick mit leerer Hand auf Treppen/Halbstufen setzt dich hin
+sit-enabled: true
+# Rüstungsständer-Tweak: platzierte Rüstungsständer bekommen Arme
+armor-stand-arms-enabled: true
+# Item-Rahmen-Tweak: Schleichen + Rechtsklick mit leerer Hand macht Item-Rahmen unsichtbar/sichtbar
+invisible-frames-enabled: true
+# Spielerköpfe-Tweak: wer von einem anderen Spieler getötet wird, lässt seinen Kopf fallen
+player-heads-enabled: true
+# Phantom-Tweak: Phantome spawnen nicht mehr natürlich
+no-phantoms-enabled: true
+# Happy-Ghast-Tweak: angepasste Fluggeschwindigkeit, solange ein Spieler reitet
+happy-ghast-enabled: true
+# Geschwindigkeits-Faktor des Happy Ghasts (erlaubt: 0.5 bis 5.0)
+happy-ghast-speed: 1.5
+# Nether-Sperre: Spieler können den Nether nicht über Portale betreten (Bypass: easysystems.tweaks.bypass.dimensions)
+nether-lock-enabled: false
+# End-Sperre: Spieler können das End nicht über Portale betreten (Bypass: easysystems.tweaks.bypass.dimensions)
+end-lock-enabled: false
 # Optionale erste MOTD-Zeile (MiniMessage). Leer lassen, um sie zu deaktivieren.
 line1: "<gradient:gold:yellow><bold>EasySystems</bold></gradient>"
 # Wird angezeigt, wenn niemand online ist.
 fallback: "<gray>Der Server schläft... weck ihn auf!"
 # %player% = zufälliger Online-Spieler
 sayings:
-  - "<green>Bei <yellow>%player%</yellow> beliebt"
-  - "<green><yellow>%player%</yellow> hat den Server gebaut <gray>(behauptet er)"
-  - "<green>Empfohlen von <yellow>%player%"
-  - "<yellow>%player%</yellow> <green>ist schon wieder online..."
-  - "<green>4 von 5 Zahnärzten empfehlen <yellow>%player%"
-  - "<green>Dank <yellow>%player%</yellow> noch nicht explodiert"
-  - "<yellow>%player%</yellow> <green>hat nur kurz Diamanten geholt"
-  - "<green>Von <yellow>%player%</yellow> <green>persönlich getestet, nie für gut befunden"
-  - "<yellow>%player%</yellow> <green>sagt: Ich lag nicht in der Lava!"
-  - "<green>Creeper fürchten <yellow>%player%"
+  - "<gray>Bei <yellow>%player%</yellow> beliebt"
+  - "<gray><yellow>%player%</yellow> hat den Server gebaut (behauptet er)"
+  - "<gray>Empfohlen von <yellow>%player%"
+  - "<yellow>%player%</yellow> <gray>ist schon wieder online..."
+  - "<gray>4 von 5 Zahnärzten empfehlen <yellow>%player%"
+  - "<gray>Dank <yellow>%player%</yellow> noch nicht explodiert"
+  - "<yellow>%player%</yellow> <gray>hat nur kurz Diamanten geholt"
+  - "<gray>Von <yellow>%player%</yellow> persönlich getestet, nie für gut befunden"
+  - "<yellow>%player%</yellow> <gray>sagt: Ich lag nicht in der Lava!"
+  - "<gray>Creeper fürchten <yellow>%player%"

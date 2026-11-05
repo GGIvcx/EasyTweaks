@@ -17,7 +17,9 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -28,6 +30,7 @@ public class EasyTweaks extends JavaPlugin implements Listener {
     private static final MiniMessage MM = MiniMessage.miniMessage();
 
     private String prefix;
+    private SmallTweaks small;
     /** Spieler, denen WIR das Leuchten gesetzt haben. */
     private final Set<UUID> glowing = new HashSet<>();
 
@@ -37,16 +40,23 @@ public class EasyTweaks extends JavaPlugin implements Listener {
         prefix = getConfig().getString("prefix", "<gold>EasyTweaks</gold> <dark_gray>┃</dark_gray> ");
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new TweaksGui(this), this);
+        small = new SmallTweaks(this);
+        getServer().getPluginManager().registerEvents(small, this);
         getServer().getScheduler().runTaskTimer(this, this::tickDragonEgg, 10L, 10L);
     }
 
     @Override
     public void onDisable() {
+        small.removeAllSeats();
         for (UUID id : glowing) {
             Player p = Bukkit.getPlayer(id);
             if (p != null) p.setGlowing(false);
         }
         glowing.clear();
+    }
+
+    SmallTweaks small() {
+        return small;
     }
 
     /** Drachenei-Tweak: Leuchten + Ender-Partikel für Spieler mit Drachenei im Inventar. */
@@ -87,10 +97,37 @@ public class EasyTweaks extends JavaPlugin implements Listener {
         if (error) p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
     }
 
+    static final String BYPASS = "easysystems.tweaks.bypass.dimensions";
+
+    /** Wirksamer Dimensions-Bypass: Berechtigung UND persönlicher Schalter nicht ausgeschaltet. */
+    boolean bypass(Player p) {
+        return p.hasPermission(BYPASS)
+                && !p.getPersistentDataContainer().has(new NamespacedKey(this, "bypass-off"), PersistentDataType.BYTE);
+    }
+
+    /** Schaltet den persönlichen Bypass um; true = jetzt aktiv. */
+    boolean toggleBypass(Player p) {
+        NamespacedKey k = new NamespacedKey(this, "bypass-off");
+        if (p.getPersistentDataContainer().has(k, PersistentDataType.BYTE)) {
+            p.getPersistentDataContainer().remove(k);
+            return true;
+        }
+        p.getPersistentDataContainer().set(k, PersistentDataType.BYTE, (byte) 1);
+        return false;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player p)) {
             sender.sendMessage(MM.deserialize(prefix + "<red>Dieser Befehl ist nur für Spieler."));
+            return true;
+        }
+        if (args.length > 0 && args[0].equalsIgnoreCase("bypass")) {
+            if (!p.hasPermission(BYPASS)) {
+                msg(p, "<red>Dafür hast du keine Berechtigung.", false, true);
+                return true;
+            }
+            msg(p, toggleBypass(p) ? "<green>Dimensions-Bypass aktiviert." : "<green>Dimensions-Bypass deaktiviert.", true, false);
             return true;
         }
         if (!p.hasPermission("easysystems.tweaks.gui")) {

@@ -26,11 +26,11 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-/** Admin-GUI (Hauptmenü + MOTD-Untermenü) samt Chat-Eingabe. */
+/** Admin-GUI (Hauptmenü + MOTD-/Happy-Ghast-Untermenü) samt Chat-Eingabe. */
 public class TweaksGui implements Listener {
 
     private static final MiniMessage MM = MiniMessage.miniMessage();
-    private static final int MAIN = 0, MOTD = 1, SAYINGS = 2, CONFIRM = 3;
+    private static final int MAIN = 0, MOTD = 1, SAYINGS = 2, CONFIRM = 3, GHAST = 4;
     private static final int PER_PAGE = 45;
 
     private final EasyTweaks plugin;
@@ -57,17 +57,76 @@ public class TweaksGui implements Listener {
     // --- Menüs ---
 
     static void openMain(EasyTweaks plugin, Player p) {
-        Inventory inv = base(27, "<dark_gray>EasyTweaks", MAIN);
-        boolean on = plugin.getConfig().getBoolean("motd-enabled", true);
-        // Weiterer Tweak = ein weiterer inv.setItem(...) hier und ein case in onClick
-        inv.setItem(11, item(Material.OAK_SIGN, "<gold>MOTD",
-                status(on), "<gray>Zufälliger Spruch mit Spielername", "<gray>in der Serverliste.", "",
-                "<dark_gray>» <yellow>Linksklick zum Umschalten", "<dark_gray>» <yellow>Rechtsklick für Einstellungen"));
-        boolean egg = plugin.getConfig().getBoolean("dragon-egg-enabled", true);
-        inv.setItem(15, item(Material.DRAGON_EGG, "<gold>Drachenei",
-                status(egg), "<gray>Spieler mit dem Drachenei leuchten", "<gray>und sind von Ender-Partikeln umgeben.", "",
-                "<dark_gray>» <yellow>Klicken zum Umschalten"));
-        inv.setItem(22, item(Material.BARRIER, "<red>Schließen"));
+        Inventory inv = base(36, "<dark_gray>EasyTweaks", MAIN);
+        // Weiterer Tweak = ein weiterer tweak(...) hier, ein Eintrag in mainKey und ggf. ein Sonderfall in onClick
+        tweak(plugin, inv, 10, Material.OAK_SIGN, "MOTD", "motd-enabled",
+                "<gray>Zufälliger Spruch mit Spielername|<gray>in der Serverliste.", "Linksklick zum Umschalten", "Rechtsklick für Einstellungen");
+        tweak(plugin, inv, 12, Material.DRAGON_EGG, "Drachenei", "dragon-egg-enabled",
+                "<gray>Spieler mit dem Drachenei leuchten|<gray>und sind von Ender-Partikeln umgeben.", "Klicken zum Umschalten");
+        tweak(plugin, inv, 14, Material.OAK_STAIRS, "Sitzen", "sit-enabled",
+                "<gray>Rechtsklick mit leerer Hand auf|<gray>Treppen und Halbstufen zum Hinsetzen.", "Klicken zum Umschalten");
+        tweak(plugin, inv, 16, Material.ARMOR_STAND, "Rüstungsständer mit Armen", "armor-stand-arms-enabled",
+                "<gray>Platzierte Rüstungsständer|<gray>haben automatisch Arme.", "Klicken zum Umschalten");
+        tweak(plugin, inv, 19, Material.ITEM_FRAME, "Unsichtbare Item-Rahmen", "invisible-frames-enabled",
+                "<gray>Schleichen + Rechtsklick mit leerer Hand|<gray>macht Item-Rahmen (un)sichtbar.", "Klicken zum Umschalten");
+        tweak(plugin, inv, 21, Material.PLAYER_HEAD, "Spielerköpfe", "player-heads-enabled",
+                "<gray>Spieler lassen beim Tod durch|<gray>einen anderen Spieler ihren Kopf fallen.", "Klicken zum Umschalten");
+        tweak(plugin, inv, 23, Material.PHANTOM_MEMBRANE, "Keine Phantome", "no-phantoms-enabled",
+                "<gray>Phantome spawnen nicht mehr|<gray>natürlich.", "Klicken zum Umschalten");
+        tweak(plugin, inv, 25, Material.GHAST_TEAR, "Happy-Ghast-Geschwindigkeit", "happy-ghast-enabled",
+                "<gray>Angepasste Fluggeschwindigkeit|<gray>für den Happy Ghast. Faktor: <yellow>"
+                        + SmallTweaks.fmt(SmallTweaks.ghastSpeed(plugin)) + "x",
+                "Linksklick zum Umschalten", "Rechtsklick für Einstellungen");
+        tweak(plugin, inv, 28, Material.NETHERRACK, "Nether-Sperre", "nether-lock-enabled",
+                "<gray>Spieler können den Nether nicht|<gray>mehr über Portale betreten.", "Klicken zum Umschalten");
+        tweak(plugin, inv, 30, Material.END_STONE, "End-Sperre", "end-lock-enabled",
+                "<gray>Spieler können das End nicht|<gray>mehr über Portale betreten.", "Klicken zum Umschalten");
+        if (p.hasPermission(EasyTweaks.BYPASS)) {
+            inv.setItem(32, item(Material.ENDER_EYE, "<aqua>Dimensions-Bypass",
+                    status(plugin.bypass(p)), "<gray>Gesperrte Dimensionen trotzdem betreten.",
+                    "", "<dark_gray>» <yellow>Klicken zum Umschalten"));
+        }
+        inv.setItem(31, item(Material.BARRIER, "<red>Schließen"));
+        p.openInventory(inv);
+    }
+
+    /** Tweak-Item: Name, Status, Beschreibung (Zeilen mit | getrennt), Klick-Hinweise. */
+    private static void tweak(EasyTweaks plugin, Inventory inv, int slot, Material mat, String name, String key,
+                              String desc, String... hints) {
+        List<String> lore = new ArrayList<>();
+        lore.add(status(plugin.getConfig().getBoolean(key, !key.endsWith("-lock-enabled"))));
+        for (String d : desc.split("\\|")) lore.add(d);
+        lore.add("");
+        for (String h : hints) lore.add("<dark_gray>» <yellow>" + h);
+        inv.setItem(slot, item(mat, "<gold>" + name, lore.toArray(new String[0])));
+    }
+
+    private static String mainKey(int slot) {
+        return switch (slot) {
+            case 10 -> "motd-enabled";
+            case 12 -> "dragon-egg-enabled";
+            case 14 -> "sit-enabled";
+            case 16 -> "armor-stand-arms-enabled";
+            case 19 -> "invisible-frames-enabled";
+            case 21 -> "player-heads-enabled";
+            case 23 -> "no-phantoms-enabled";
+            case 25 -> "happy-ghast-enabled";
+            case 28 -> "nether-lock-enabled";
+            case 30 -> "end-lock-enabled";
+            default -> null;
+        };
+    }
+
+    static void openGhast(EasyTweaks plugin, Player p) {
+        Inventory inv = base(27, "<dark_gray>Happy Ghast", GHAST);
+        boolean on = plugin.getConfig().getBoolean("happy-ghast-enabled", true);
+        inv.setItem(10, item(on ? Material.LIME_DYE : Material.GRAY_DYE, on ? "<green>Happy Ghast an" : "<red>Happy Ghast aus",
+                status(on), "", "<dark_gray>» <yellow>Klicken zum Umschalten"));
+        inv.setItem(12, item(Material.RED_DYE, "<yellow>-0.1", "<gray>Faktor verringern (min. 0.5)", "", "<dark_gray>» <yellow>Klicken zum Verringern"));
+        inv.setItem(13, build(Material.FEATHER, "<gold>Geschwindigkeit",
+                List.of(line("<gray>Faktor: <yellow><v>x", SmallTweaks.fmt(SmallTweaks.ghastSpeed(plugin))))));
+        inv.setItem(14, item(Material.LIME_DYE, "<yellow>+0.1", "<gray>Faktor erhöhen (max. 5.0)", "", "<dark_gray>» <yellow>Klicken zum Erhöhen"));
+        inv.setItem(22, item(Material.ARROW, "<yellow>Zurück"));
         p.openInventory(inv);
     }
 
@@ -184,19 +243,27 @@ public class TweaksGui implements Listener {
         if (it == null || it.getType() == Material.GRAY_STAINED_GLASS_PANE) return;
         int slot = e.getSlot();
         // Leerzustand und Vorschau im Bestätigungsdialog sind keine aktiven Items
-        if ((menu.type() == SAYINGS && it.getType() == Material.BARRIER) || (menu.type() == CONFIRM && slot == 13)) return;
+        if ((menu.type() == SAYINGS && it.getType() == Material.BARRIER) || (menu.type() == CONFIRM && slot == 13)
+                || (menu.type() == GHAST && slot == 13)) return;
         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
 
         if (menu.type() == MAIN) {
-            if (slot == 22) p.closeInventory();
-            else if (slot == 15) {
-                plugin.getConfig().set("dragon-egg-enabled", !plugin.getConfig().getBoolean("dragon-egg-enabled", true));
-                plugin.saveConfig();
+            if (slot == 31) { p.closeInventory(); return; }
+            if (slot == 32 && p.hasPermission(EasyTweaks.BYPASS)) {
+                plugin.toggleBypass(p);
                 p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
                 openMain(plugin, p);
-            } else if (slot == 11) {
-                if (e.getClick() == ClickType.RIGHT) openMotd(plugin, p);
-                else if (e.getClick() == ClickType.LEFT) { toggle(); p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f); openMain(plugin, p); }
+                return;
+            }
+            String key = mainKey(slot);
+            if (key == null) return;
+            boolean sub = slot == 10 || slot == 25;
+            if (sub && e.getClick() == ClickType.RIGHT) {
+                if (slot == 10) openMotd(plugin, p); else openGhast(plugin, p);
+            } else if (!sub || e.getClick() == ClickType.LEFT) {
+                flip(key);
+                p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+                openMain(plugin, p);
             }
         } else if (menu.type() == SAYINGS) {
             sayingsClick(p, menu, slot, e.getClick());
@@ -211,9 +278,27 @@ public class TweaksGui implements Listener {
                 } else stale(p);
                 openSayings(plugin, p, menu.page());
             } else if (slot == 15) openSayings(plugin, p, menu.page());
+        } else if (menu.type() == GHAST) {
+            switch (slot) {
+                case 10 -> { flip("happy-ghast-enabled"); p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f); }
+                case 12, 14 -> {
+                    double cur = SmallTweaks.ghastSpeed(plugin);
+                    double next = Math.round((cur + (slot == 12 ? -0.1 : 0.1)) * 10) / 10.0;
+                    if (next < SmallTweaks.MIN_SPEED || next > SmallTweaks.MAX_SPEED) {
+                        p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
+                        return;
+                    }
+                    plugin.getConfig().set("happy-ghast-speed", next);
+                    plugin.saveConfig();
+                    plugin.small().updateRiddenGhasts();
+                }
+                case 22 -> { openMain(plugin, p); return; }
+                default -> { return; }
+            }
+            openGhast(plugin, p);
         } else {
             switch (slot) {
-                case 10 -> { toggle(); p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f); openMotd(plugin, p); }
+                case 10 -> { flip("motd-enabled"); p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f); openMotd(plugin, p); }
                 case 12 -> prompt(p, "line1", "die neue erste MOTD-Zeile");
                 case 14 -> prompt(p, "fallback", "den neuen Fallback-Text");
                 case 16 -> openSayings(plugin, p, 0);
@@ -304,9 +389,10 @@ public class TweaksGui implements Listener {
         plugin.msg(p, "<red>Der Spruch wurde inzwischen geändert.", false, true);
     }
 
-    private void toggle() {
-        plugin.getConfig().set("motd-enabled", !plugin.getConfig().getBoolean("motd-enabled", true));
+    private void flip(String key) {
+        plugin.getConfig().set(key, !plugin.getConfig().getBoolean(key, !key.endsWith("-lock-enabled")));
         plugin.saveConfig();
+        if (key.equals("happy-ghast-enabled")) plugin.small().updateRiddenGhasts();
     }
 
     private void prompt(Player p, String key, String what) {

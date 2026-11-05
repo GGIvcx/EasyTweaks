@@ -56,33 +56,36 @@ public class TweaksGui implements Listener {
 
     // --- Menüs ---
 
+    // Reihen: 0 Server (MOTD, Drachenei), 1 Gameplay, 2 Dimensionen (Bypass mittig zwischen den Sperren); Schließen unten Mitte
+    private static final int BYPASS_SLOT = 22, MOTD_SLOT = 3, GHAST_SLOT = 16;
+
     static void openMain(EasyTweaks plugin, Player p) {
         Inventory inv = base(36, "<dark_gray>EasyTweaks", MAIN);
         // Weiterer Tweak = ein weiterer tweak(...) hier, ein Eintrag in mainKey und ggf. ein Sonderfall in onClick
-        tweak(plugin, inv, 10, Material.OAK_SIGN, "MOTD", "motd-enabled",
+        tweak(plugin, inv, MOTD_SLOT, Material.OAK_SIGN, "MOTD", "motd-enabled",
                 "<gray>Zufälliger Spruch mit Spielername|<gray>in der Serverliste.", "Linksklick zum Umschalten", "Rechtsklick für Einstellungen");
-        tweak(plugin, inv, 12, Material.DRAGON_EGG, "Drachenei", "dragon-egg-enabled",
+        tweak(plugin, inv, 5, Material.DRAGON_EGG, "Drachenei", "dragon-egg-enabled",
                 "<gray>Spieler mit dem Drachenei leuchten|<gray>und sind von Ender-Partikeln umgeben.", "Klicken zum Umschalten");
-        tweak(plugin, inv, 14, Material.OAK_STAIRS, "Sitzen", "sit-enabled",
+        tweak(plugin, inv, 10, Material.OAK_STAIRS, "Sitzen", "sit-enabled",
                 "<gray>Rechtsklick mit leerer Hand auf|<gray>Treppen und Halbstufen zum Hinsetzen.", "Klicken zum Umschalten");
-        tweak(plugin, inv, 16, Material.ARMOR_STAND, "Rüstungsständer mit Armen", "armor-stand-arms-enabled",
+        tweak(plugin, inv, 11, Material.ARMOR_STAND, "Rüstungsständer mit Armen", "armor-stand-arms-enabled",
                 "<gray>Platzierte Rüstungsständer|<gray>haben automatisch Arme.", "Klicken zum Umschalten");
-        tweak(plugin, inv, 19, Material.ITEM_FRAME, "Unsichtbare Item-Rahmen", "invisible-frames-enabled",
+        tweak(plugin, inv, 12, Material.ITEM_FRAME, "Unsichtbare Item-Rahmen", "invisible-frames-enabled",
                 "<gray>Schleichen + Rechtsklick mit leerer Hand|<gray>macht Item-Rahmen (un)sichtbar.", "Klicken zum Umschalten");
-        tweak(plugin, inv, 21, Material.PLAYER_HEAD, "Spielerköpfe", "player-heads-enabled",
+        tweak(plugin, inv, 14, Material.PLAYER_HEAD, "Spielerköpfe", "player-heads-enabled",
                 "<gray>Spieler lassen beim Tod durch|<gray>einen anderen Spieler ihren Kopf fallen.", "Klicken zum Umschalten");
-        tweak(plugin, inv, 23, Material.PHANTOM_MEMBRANE, "Keine Phantome", "no-phantoms-enabled",
+        tweak(plugin, inv, 15, Material.PHANTOM_MEMBRANE, "Keine Phantome", "no-phantoms-enabled",
                 "<gray>Phantome spawnen nicht mehr|<gray>natürlich.", "Klicken zum Umschalten");
-        tweak(plugin, inv, 25, Material.GHAST_TEAR, "Happy-Ghast-Geschwindigkeit", "happy-ghast-enabled",
+        tweak(plugin, inv, GHAST_SLOT, Material.GHAST_TEAR, "Happy-Ghast-Geschwindigkeit", "happy-ghast-enabled",
                 "<gray>Angepasste Fluggeschwindigkeit|<gray>für den Happy Ghast. Faktor: <yellow>"
                         + SmallTweaks.fmt(SmallTweaks.ghastSpeed(plugin)) + "x",
                 "Linksklick zum Umschalten", "Rechtsklick für Einstellungen");
-        tweak(plugin, inv, 28, Material.NETHERRACK, "Nether-Sperre", "nether-lock-enabled",
+        tweak(plugin, inv, 21, Material.NETHERRACK, "Nether-Sperre", "nether-lock-enabled",
                 "<gray>Spieler können den Nether nicht|<gray>mehr über Portale betreten.", "Klicken zum Umschalten");
-        tweak(plugin, inv, 30, Material.END_STONE, "End-Sperre", "end-lock-enabled",
+        tweak(plugin, inv, 23, Material.END_STONE, "End-Sperre", "end-lock-enabled",
                 "<gray>Spieler können das End nicht|<gray>mehr über Portale betreten.", "Klicken zum Umschalten");
         if (p.hasPermission(EasyTweaks.BYPASS)) {
-            inv.setItem(32, item(Material.ENDER_EYE, "<aqua>Dimensions-Bypass",
+            inv.setItem(BYPASS_SLOT, item(Material.ENDER_EYE, "<aqua>Dimensions-Bypass",
                     status(plugin.bypass(p)), "<gray>Gesperrte Dimensionen trotzdem betreten.",
                     "", "<dark_gray>» <yellow>Klicken zum Umschalten", "<dark_gray>Hinweis: Gilt nur für dich selbst."));
         }
@@ -103,16 +106,16 @@ public class TweaksGui implements Listener {
 
     private static String mainKey(int slot) {
         return switch (slot) {
-            case 10 -> "motd-enabled";
-            case 12 -> "dragon-egg-enabled";
-            case 14 -> "sit-enabled";
-            case 16 -> "armor-stand-arms-enabled";
-            case 19 -> "invisible-frames-enabled";
-            case 21 -> "player-heads-enabled";
-            case 23 -> "no-phantoms-enabled";
-            case 25 -> "happy-ghast-enabled";
-            case 28 -> "nether-lock-enabled";
-            case 30 -> "end-lock-enabled";
+            case MOTD_SLOT -> "motd-enabled";
+            case 5 -> "dragon-egg-enabled";
+            case 10 -> "sit-enabled";
+            case 11 -> "armor-stand-arms-enabled";
+            case 12 -> "invisible-frames-enabled";
+            case 14 -> "player-heads-enabled";
+            case 15 -> "no-phantoms-enabled";
+            case GHAST_SLOT -> "happy-ghast-enabled";
+            case 21 -> "nether-lock-enabled";
+            case 23 -> "end-lock-enabled";
             default -> null;
         };
     }
@@ -249,7 +252,7 @@ public class TweaksGui implements Listener {
 
         if (menu.type() == MAIN) {
             if (slot == 31) { p.closeInventory(); return; }
-            if (slot == 32 && p.hasPermission(EasyTweaks.BYPASS)) {
+            if (slot == BYPASS_SLOT && p.hasPermission(EasyTweaks.BYPASS)) {
                 plugin.toggleBypass(p);
                 p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
                 openMain(plugin, p);
@@ -257,9 +260,9 @@ public class TweaksGui implements Listener {
             }
             String key = mainKey(slot);
             if (key == null) return;
-            boolean sub = slot == 10 || slot == 25;
+            boolean sub = slot == MOTD_SLOT || slot == GHAST_SLOT;
             if (sub && e.getClick() == ClickType.RIGHT) {
-                if (slot == 10) openMotd(plugin, p); else openGhast(plugin, p);
+                if (slot == MOTD_SLOT) openMotd(plugin, p); else openGhast(plugin, p);
             } else if (!sub || e.getClick() == ClickType.LEFT) {
                 flip(key);
                 p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
